@@ -1,0 +1,66 @@
+-------------------- TerraForm ---------------------------
+
+what is this Terraform? 
+TerraForm is bascially a IAC (infrastructure as Code) tool created by hasicorp.
+and files written in Json or HCL (Hashicorp configuration language).
+
+What is Hashicorp?
+It is a software company that builds IAC tools espacially in cloud environment.
+
+What is HCL?
+It is the domain specific language used to write-configuration files for terraform.
+files extenxsion = .tf
+
+why we need this terraform ?
+Imagine you work for a startup that hosts its application on AWS.
+
+🔴 Without Terraform:
+You log in to the AWS Console.
+
+Manually create:
+
+1 EC2 instance for the app.
+1 RDS database.
+1 S3 bucket for storing user files.
+A security group, IAM roles, etc.
+You do this again for:
+Staging
+Production
+Every time there’s an update
+
+with Terraform: 
+Terraform can define all of this in code and deploy it automatically.
+
+----------------- Syntax: Block, arguments & Atrributes ------------------
+
+block parameters {
+//
+  arguments
+// 
+}
+
+Example: Create a terraform hcl code for creating the text file in your local?
+
+solution: So, first this is resources 
+block = resources
+paramters = local_file
+name_of _the_file = myfile
+arguments = filename and i want some content in this file
+
+resource "local_file" "my_file" {
+    filename = "automate.txt"
+    content = "This text file is created by terraform"  
+}
+
+to execute thi file first run [it will provide the environment to terraform to execute cmd]
+terraform init ( one time run)
+terraform validate (it will validate the syntax of terraform)
+terraform plan (it will show the plan before the creating resoruces)
+terraform apply (it will execute the .tf file)
+
+------------- Boom file is created ----------------------------
+
+
+############ Important ###########
+Arguments: it is bascally wrote before execution which is already known.
+Attributes: It is bascaily get after the execution 
