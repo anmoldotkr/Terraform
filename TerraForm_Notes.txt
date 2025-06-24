@@ -64,3 +64,41 @@ terraform apply (it will execute the .tf file)
 ############ Important ###########
 Arguments: it is bascally wrote before execution which is already known.
 Attributes: It is bascaily get after the execution 
+
+--------------------------------------------
+------- Terrraform cmd's -------------------
+--------------------------------------------
+terraform init
+terraform validate
+terraform plan
+terraform apply
+terraform destroy
+
+
+
+------------- explaining this block ---------------------
+resource "local_file" "my_file" {
+    filename = "automate.txt"
+    content = "This text file is created by terraform"  
+}
+
+Note:: 
+resoruce is a block
+--> "local_file" = resource type not provider
+--> The Provider is local.
+--> The Resources type is local_file , which is provided by local provider (means jo pehele likha h local that is provider!)
+--> "my_file" = is resource name not file name [and it should be unique everytime you can't define two resources with same type with same name in same module.]
+
+
+
+Example :: Create S3 bucket using terraform:
+----------------------------------------------
+
+Prequesities:
+----------------
+1. awscli installed.
+2. install aws provider.
+2. create .tf file for creating s3 bucket.
+=----> In this we will configured the region in provider.
+
+
