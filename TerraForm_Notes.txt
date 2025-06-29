@@ -114,5 +114,25 @@ Question: Why need to craete separate terraform.tf file?
 sol: No, It is not necessary to create separate terraform.tf file this is only for better convention,
 the only one thing matter here is what pass inside the terraform block with the required_providers is required for terraform configuration.
 
+----------------------------------------------------------
 
+String Interpolation:
+--> It is a way to inserting dynamic values of variables or the resources inside a string ${...}
+example: 
+resource "aws_s3_bucket" "mybkt" {
+  bucket = "my-terraform-${var.environment}-bucket"
+}
+
+if var.environment = "dev", the bucket name becomes: my-terraform-dev-bucket
+
+------------ Variable-------
+It helps to make code dynamic and reuse, instead of using hardcode values(region, cidrblocks etc)
+
+----------- count------------------------------
+count: It Creates multiple copies of the resource
+count.index: It Gives the current index in the loop (starts at 0)
+
+----------- Terraform element(list, index) function:-------------
+It picks one item from a list based on its position (index).
+element() is used to dynamically select the correct CIDR block for each subnet being created.
 
