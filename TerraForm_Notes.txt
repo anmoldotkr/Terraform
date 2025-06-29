@@ -101,4 +101,18 @@ Prequesities:
 2. create .tf file for creating s3 bucket.
 =----> In this we will configured the region in provider.
 
+Solution: 
+
+resource "aws_s3_bucket" "mybkt" {
+  bucket = "my-terraform-bucket"
+}
+
+Question: why need to create a provider.tf file?
+sol: It contain provider configuration which tell terraform which service or cloud platform will use (aws , gcp and azure).
+
+Question: Why need to craete separate terraform.tf file?
+sol: No, It is not necessary to create separate terraform.tf file this is only for better convention,
+the only one thing matter here is what pass inside the terraform block with the required_providers is required for terraform configuration.
+
+
 
