@@ -109,7 +109,18 @@ resource "aws_security_group" "test-sg" {
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  ingress  {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress  {
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   egress {
     from_port = 0
     to_port = 0
@@ -125,7 +136,9 @@ resource "aws_security_group" "test-sg" {
 resource "aws_instance" "my-test-ec2-insta" {
   subnet_id = aws_subnet.my_pulbic_subnet[0].id
   key_name = aws_key_pair.testkey.key_name
-  security_groups = [ aws_security_group.test-sg.id ]
+
+  vpc_security_group_ids = [aws_security_group.test-sg.id]
+
   instance_type = var.instance_type
   ami = var.ami_id
   associate_public_ip_address = true
