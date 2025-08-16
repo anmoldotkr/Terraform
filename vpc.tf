@@ -3,6 +3,7 @@
 # 1. vpc , subnet's , route table and igw (Done)
 # 2. key pair. (Done)
 # 3. EC2. (Done)
+# 4. Installing nginx using user_data
 # ------------------------
 
 # VPC
@@ -145,7 +146,8 @@ resource "aws_instance" "my-test-ec2-insta" {
   tags = {
     "Name" = var.instance_name
   }
-
+  # running shell script for installing nginx
+  user_data = file("nginx.sh")
   root_block_device {
     volume_size = 10
     volume_type = "gp3"
