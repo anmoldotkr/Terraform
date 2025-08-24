@@ -1,138 +1,247 @@
--------------------- TerraForm ---------------------------
 
-what is this Terraform? 
-TerraForm is bascially a IAC (infrastructure as Code) tool created by hasicorp.
-and files written in Json or HCL (Hashicorp configuration language).
+# 🌍 Terraform Basics
 
-What is Hashicorp?
-It is a software company that builds IAC tools espacially in cloud environment.
+## 🔹 What is Terraform?
 
-What is HCL?
-It is the domain specific language used to write-configuration files for terraform.
-files extenxsion = .tf
+Terraform is an **Infrastructure as Code (IaC)** tool created by **HashiCorp**.
+It allows you to define, provision, and manage infrastructure in a declarative way.
 
-why we need this terraform ?
-Imagine you work for a startup that hosts its application on AWS.
+* Configuration files can be written in:
 
-🔴 Without Terraform:
-You log in to the AWS Console.
+  * **HCL (HashiCorp Configuration Language)** → commonly used (`.tf` files)
+  * **JSON**
 
-Manually create:
+---
 
-1 EC2 instance for the app.
-1 RDS database.
-1 S3 bucket for storing user files.
-A security group, IAM roles, etc.
-You do this again for:
-Staging
-Production
-Every time there’s an update
+## 🔹 What is HashiCorp?
 
-with Terraform: 
-Terraform can define all of this in code and deploy it automatically.
+HashiCorp is a software company that builds tools for cloud infrastructure management, such as:
 
------------------ Syntax: Block, arguments & Atrributes ------------------
+* Terraform (IaC)
+* Vault (secrets management)
+* Consul (service networking)
+* Nomad (workload orchestration)
 
-block parameters {
-//
-  arguments
-// 
+---
+
+## 🔹 What is HCL?
+
+HCL (**HashiCorp Configuration Language**) is a domain-specific language used to write Terraform configuration files.
+
+* File extension: **`.tf`**
+* Designed to be **human-readable & machine-friendly**
+
+---
+
+## 🔹 Why Terraform?
+
+### 🚫 Without Terraform (Manual Setup)
+
+* You log in to AWS Console
+* Create resources manually (EC2, RDS, S3, IAM, Security Groups)
+* Repeat for staging, production, etc.
+* Any change requires repeating steps → **error-prone & time-consuming**
+
+### ✅ With Terraform (Automated Setup)
+
+* Define resources in code
+* Reuse across environments (Dev, Stage, Prod)
+* Version control infra configs
+* Run once → deploy automatically
+
+---
+
+## 🔹 Terraform Syntax
+
+### General Syntax
+
+```hcl
+block_type "resource_type" "resource_name" {
+  argument1 = value
+  argument2 = value
 }
+```
 
-Example: Create a terraform hcl code for creating the text file in your local?
+* **Block** → Top-level structure (e.g., `resource`, `provider`, `variable`)
+* **Arguments** → Define values inside a block (e.g., `bucket`, `filename`)
+* **Attributes** → Values available **after** resource creation (e.g., ARN of an S3 bucket)
 
-solution: So, first this is resources 
-block = resources
-paramters = local_file
-name_of _the_file = myfile
-arguments = filename and i want some content in this file
+---
 
+## 🔹 Example 1: Create Local File
+
+```hcl
 resource "local_file" "my_file" {
-    filename = "automate.txt"
-    content = "This text file is created by terraform"  
+  filename = "automate.txt"
+  content  = "This text file is created by terraform"
 }
+```
 
-to execute thi file first run [it will provide the environment to terraform to execute cmd]
-terraform init ( one time run)
-terraform validate (it will validate the syntax of terraform)
-terraform plan (it will show the plan before the creating resoruces)
-terraform apply (it will execute the .tf file)
+### Notes:
 
-------------- Boom file is created ----------------------------
+* **resource** → block type
+* **local\_file** → resource type (from **local provider**)
+* **my\_file** → resource name (must be unique within the module)
+* `filename` & `content` → arguments
 
+---
 
-############ Important ###########
-Arguments: it is bascally wrote before execution which is already known.
-Attributes: It is bascaily get after the execution 
+## 🔹 Terraform Commands
 
---------------------------------------------
-------- Terrraform cmd's -------------------
---------------------------------------------
-terraform init
-terraform validate
-terraform plan
-terraform apply
-terraform destroy
+1. `terraform init` → Initialize provider plugins
+2. `terraform validate` → Check syntax
+3. `terraform plan` → Preview changes
+4. `terraform apply` → Apply changes (creates resources)
+5. `terraform destroy` → Delete resources
 
+---
 
+## 🔹 Example 2: Create AWS S3 Bucket
 
-------------- explaining this block ---------------------
-resource "local_file" "my_file" {
-    filename = "automate.txt"
-    content = "This text file is created by terraform"  
+### Prerequisites:
+
+* AWS CLI installed & configured
+* AWS provider set up in Terraform
+
+### `provider.tf` (to define cloud provider)
+
+```hcl
+provider "aws" {
+  region = "us-east-1"
 }
+```
 
-Note:: 
-resoruce is a block
---> "local_file" = resource type not provider
---> The Provider is local.
---> The Resources type is local_file , which is provided by local provider (means jo pehele likha h local that is provider!)
---> "my_file" = is resource name not file name [and it should be unique everytime you can't define two resources with same type with same name in same module.]
+### `s3.tf` (to create bucket)
 
-
-
-Example :: Create S3 bucket using terraform:
-----------------------------------------------
-
-Prequesities:
-----------------
-1. awscli installed.
-2. install aws provider.
-2. create .tf file for creating s3 bucket.
-=----> In this we will configured the region in provider.
-
-Solution: 
-
+```hcl
 resource "aws_s3_bucket" "mybkt" {
   bucket = "my-terraform-bucket"
 }
+```
 
-Question: why need to create a provider.tf file?
-sol: It contain provider configuration which tell terraform which service or cloud platform will use (aws , gcp and azure).
+---
 
-Question: Why need to craete separate terraform.tf file?
-sol: No, It is not necessary to create separate terraform.tf file this is only for better convention,
-the only one thing matter here is what pass inside the terraform block with the required_providers is required for terraform configuration.
+## 🔹 Why `provider.tf`?
 
-----------------------------------------------------------
+* Defines which provider Terraform should use (AWS, GCP, Azure, etc.)
+* Without it, Terraform won’t know where to create resources
 
-String Interpolation:
---> It is a way to inserting dynamic values of variables or the resources inside a string ${...}
-example: 
+---
+
+## 🔹 File Organization
+
+* Not mandatory, but best practice:
+
+  * `provider.tf` → provider config
+  * `variables.tf` → input variables
+  * `main.tf` → resources
+  * `terraform.tfvars` → variable values
+  * `outputs.tf` → outputs
+
+---
+
+## 🔹 String Interpolation
+
+Used to insert **dynamic values** into strings:
+
+```hcl
 resource "aws_s3_bucket" "mybkt" {
   bucket = "my-terraform-${var.environment}-bucket"
 }
+```
 
-if var.environment = "dev", the bucket name becomes: my-terraform-dev-bucket
+If `var.environment = "dev"` → bucket = `my-terraform-dev-bucket`
 
------------- Variable-------
-It helps to make code dynamic and reuse, instead of using hardcode values(region, cidrblocks etc)
+---
 
------------ count------------------------------
-count: It Creates multiple copies of the resource
-count.index: It Gives the current index in the loop (starts at 0)
+## 🔹 Variables
 
------------ Terraform element(list, index) function:-------------
-It picks one item from a list based on its position (index).
-element() is used to dynamically select the correct CIDR block for each subnet being created.
+Make code reusable and dynamic.
 
+```hcl
+variable "environment" {
+  type    = string
+  default = "dev"
+}
+```
+
+Usage: `${var.environment}`
+
+---
+
+## 🔹 Count
+
+Used to create multiple resources dynamically.
+
+```hcl
+resource "aws_instance" "servers" {
+  count = 3
+  ami   = "ami-123456"
+  type  = "t2.micro"
+}
+```
+
+* Creates **3 EC2 instances**
+* `count.index` → current index (starts at 0)
+
+---
+
+## 🔹 element() Function
+
+Selects an item from a list by index.
+
+```hcl
+variable "cidr_blocks" {
+  default = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+
+resource "aws_subnet" "example" {
+  count      = 2
+  cidr_block = element(var.cidr_blocks, count.index)
+}
+```
+
+* Subnet 0 → `10.0.1.0/24`
+* Subnet 1 → `10.0.2.0/24`
+
+---
+
+# 🎯 Quick Recap
+
+* **Terraform** = IaC tool by HashiCorp
+* **HCL** = Language to write `.tf` files
+* **Blocks** = Building units (`resource`, `provider`, `variable`)
+* **Arguments** = Defined before execution
+* **Attributes** = Computed after execution
+* **Commands** = init → validate → plan → apply → destroy
+* **Best Practice** = Organize files (`provider.tf`, `main.tf`, etc.)
+
+
+# Loops in Terraform
+1. count (simplest Loop)
+- creates multiple copies of the same resource.
+- Use count.index (starts at 0).
+
+Example create 3 EC2:
+resource "aws_instance" "server"{
+  count = 3
+  ami  = "ami-12345"
+  instance_type  = "t2.micro"
+  tags = {
+    Name = "server-${count.index}"
+  }
+}
+
+output: server-0,server-1,server-2
+
+2. for_each (loop over maps or sets)
+- Better than count when you want to work with named items instead of indexes.
+
+variable "bucket_name" {
+  default = ["dev-bucket", "stage-bucket", "prod-bucket"]
+}
+
+resource "aws_s3_bucket" "ex" {
+  for_each = toset(var.bucketname)
+  bucket = each.value
+}
