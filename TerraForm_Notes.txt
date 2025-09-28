@@ -245,3 +245,86 @@ resource "aws_s3_bucket" "ex" {
   for_each = toset(var.bucketname)
   bucket = each.value
 }
+**Meta-arguments** are special arguments you can use with resources, modules, and other Terraform blocks. They don’t directly configure a resource itself, but instead control **how Terraform manages that resource**.
+
+Some common **meta-arguments** in Terraform:
+
+1. **`count`**
+
+   * Lets you create multiple instances of the same resource.
+
+   ```hcl
+   resource "aws_instance" "example" {
+     count = 3
+     ami           = "ami-123456"
+     instance_type = "t2.micro"
+   }
+   ```
+
+   → Creates 3 EC2 instances.
+
+---
+
+2. **`for_each`**
+
+   * Similar to `count`, but works with maps or sets of strings.
+
+   ```hcl
+   resource "aws_s3_bucket" "example" {
+     for_each = toset(["logs", "data", "images"])
+     bucket   = "${each.key}-bucket"
+   }
+   ```
+
+   → Creates 3 buckets with names `logs-bucket`, `data-bucket`, `images-bucket`.
+
+---
+
+3. **`provider`**
+
+   * Lets you choose which provider configuration to use.
+
+   ```hcl
+   resource "aws_instance" "example" {
+     provider      = aws.us_east
+     ami           = "ami-123456"
+     instance_type = "t2.micro"
+   }
+   ```
+
+---
+
+4. **`depends_on`**
+
+   * Explicitly sets dependencies between resources.
+
+   ```hcl
+   resource "aws_instance" "example" {
+     ami           = "ami-123456"
+     instance_type = "t2.micro"
+     depends_on    = [aws_s3_bucket.example]
+   }
+   ```
+
+---
+
+5. **`lifecycle`**
+
+   * Controls how Terraform handles resource updates/deletions.
+
+   ```hcl
+   resource "aws_instance" "example" {
+     ami           = "ami-123456"
+     instance_type = "t2.micro"
+
+     lifecycle {
+       prevent_destroy = true
+       ignore_changes  = [tags]
+     }
+   }
+   ```
+
+---
+
+✅ In short: **Meta-arguments are special arguments that modify Terraform’s behavior when creating, updating, or destroying resources.**
+
