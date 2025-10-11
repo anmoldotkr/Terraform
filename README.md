@@ -361,3 +361,8 @@ When you run:
 ```bash
 terraform init
 terraform apply
+
+Terraform automatically creates a local state file:
+```bash
+terraform.tfstate
+
