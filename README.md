@@ -327,3 +327,37 @@ Some common **meta-arguments** in Terraform:
 ---
 
 ✅ In short: **Meta-arguments are special arguments that modify Terraform’s behavior when creating, updating, or destroying resources.**
+
+# 🌍 Terraform State & State Management
+
+---
+
+## 🧭 Overview
+
+Terraform **state** is the *backbone* of Terraform’s infrastructure management.  
+It keeps track of the real-world resources Terraform manages and ensures consistent planning, creation, and updates.
+
+---
+
+## 🧠 What is Terraform State?
+
+Terraform stores the details of all created resources in a **state file**, usually named:
+
+terraform.tfstate
+This file acts as the **source of truth** for Terraform.
+
+### Terraform uses it to:
+
+- Record resources created, their IDs, ARNs, attributes, etc.
+- Compare what exists (state) with what’s defined in `.tf` files.
+- Decide what to **create**, **update**, or **destroy**.
+
+---
+
+## 🪣 Local State (Default Behavior)
+
+When you run:
+
+```bash
+terraform init
+terraform apply
