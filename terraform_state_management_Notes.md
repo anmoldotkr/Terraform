@@ -13,6 +13,39 @@
 | `terraform import <resource> <id>` | Bring existing infra into Terraform state.           |
 
 
+
+**Explore the State:**
+-> terraform state list
+Output will show: = aws_s3_bucket.state_mt_s3
+
+
+Then inspect the resource:
+terraform state show aws_s3_bucket.state_mt_s3
+
+
+Notice all attributes — tags, region, bucket ARN, etc.
+These values are what Terraform will use next time you change something.
+
+**Modify the Resource state**
+example
+
+resource "aws_s3_bucket" "state_mt_s3" {
+  bucket = "terra-st-s3"
+
+  tags = {
+    Name        = "terra-st-s3"
+    Environment = "dev"
+  }
+}
+terraform plan
+**Output**
+~ tags = {
+      + Environment = "dev"
+    }
+Terraform compared your config vs. state file — and realized it needs to update tags.
+
+**manual deletion / drift in terraform**
+
  “What Happens When You Delete a Resource Manually”
 
 **What you did:**
@@ -43,9 +76,6 @@ So in short:
 
 
 ------
-Perfect 👍 — here’s how you can phrase the **ideal, interview-ready answer** to that question.
-
----
 
 ### 🧩 Question
 
@@ -82,9 +112,5 @@ So yes:
 
 ---
 
-### 💬 Optional one-liner summary
-
-> Terraform compares your configuration with its state file to decide what to create, modify, or destroy — the state is its “memory” of managed infrastructure.
-
----
+**Re-Import Resource in state file**
 
