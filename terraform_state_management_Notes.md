@@ -112,5 +112,48 @@ So yes:
 
 ---
 
-**Re-Import Resource in state file**
+Absolutely! Here’s a **concise, easy-to-remember summary** of **Step 6 — Re-Import Resource** for your notes:
 
+---
+## 🧩  Re-Import Resource (Summary)
+
+**Goal:** Bring an existing AWS resource back under Terraform management without recreating it.
+
+### **Key Points**
+
+1. **Terraform import only updates the state**
+
+   * It does **not create or modify the actual resource** in AWS.
+
+2. **Resource must exist in your `.tf` configuration**
+
+   * For `for_each` resources, the key in config must match the import key.
+   * Example:
+
+     ```bash
+     terraform import 'aws_s3_bucket.state_mt_s3["dev"]' terra-st-s3-dev
+     ```
+
+3. **After import**
+
+   * Terraform knows about the resource and tracks it in state.
+   * Run `terraform plan` to see if config matches the real resource.
+   * Only run `terraform apply` if there are differences (e.g., tags, versioning).
+
+4. **Useful for:**
+
+   * Migrating manually created resources under Terraform control
+   * Recovering resources after `terraform state rm`
+   * Integrating existing infrastructure into a new Terraform setup
+
+---
+
+### **One-liner Summary**
+
+> **Import = Add resource to Terraform state; Apply = only needed if config differs from AWS.**
+
+---
+
+If you want, I can also make a **super-short 3-line “Step 6 cheat sheet”** for fast revision with commands — perfect for labs or interview prep.
+
+Do you want me to do that?
