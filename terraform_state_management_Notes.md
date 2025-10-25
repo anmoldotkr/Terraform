@@ -3,6 +3,16 @@
 
 ################ Terraform state Management Question's: ###################
 --------------------------------------------------------------------------------
+
+| Command                            | Purpose                                              |
+| ---------------------------------- | ---------------------------------------------------- |
+| `terraform state list`             | Lists resources in state.                            |
+| `terraform state show <resource>`  | View details of a resource.                          |
+| `terraform state rm <resource>`    | Remove a resource from state (Terraform forgets it). |
+| `terraform state mv <src> <dest>`  | Rename or move resources in state.                   |
+| `terraform import <resource> <id>` | Bring existing infra into Terraform state.           |
+
+
  “What Happens When You Delete a Resource Manually”
 
 **What you did:**
